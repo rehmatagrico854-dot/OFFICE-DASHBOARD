@@ -1,8 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
-<widget id="com.rehmat.myoffice"
-        version="1.0.0"
-        xmlns="http://www.w3.org/ns/widgets"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="utf-8"?>
+<widget
+    id="com.rehmat.myoffice"
+    version="1.0.0"
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <name>My Office</name>
 
@@ -18,14 +19,18 @@
 
     <access origin="*" />
 
+    <!-- ==============================
+         ALLOWED LINKS
+         ============================== -->
+
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="mailto:*" />
 
-    <!-- =================================================
-         ANDROID
-         ================================================= -->
+    <!-- ==============================
+         ANDROID SETTINGS
+         ============================== -->
 
     <preference
         name="android-minSdkVersion"
@@ -43,29 +48,17 @@
         name="AndroidXEnabled"
         value="true" />
 
-    <preference
-        name="GradlePluginKotlinEnabled"
-        value="true" />
-
-    <preference
-        name="SplashScreenDelay"
-        value="0" />
-
-    <preference
-        name="AutoHideSplashScreen"
-        value="true" />
-
-    <!-- =================================================
+    <!-- ==============================
          CAMERA
-         ================================================= -->
+         ============================== -->
 
     <plugin
         name="cordova-plugin-camera"
         spec="^8.0.0" />
 
-    <!-- =================================================
-         FILE SELECTOR
-         ================================================= -->
+    <!-- ==============================
+         FILE ACCESS
+         ============================== -->
 
     <plugin
         name="cordova-plugin-file"
@@ -75,17 +68,9 @@
         name="cordova-plugin-filechooser"
         spec="^1.0.0" />
 
-    <!-- =================================================
-         LOCAL NOTIFICATIONS
-         ================================================= -->
-
-    <plugin
-        name="cordova-plugin-local-notification"
-        spec="^0.9.0" />
-
-    <!-- =================================================
+    <!-- ==============================
          STATUS BAR
-         ================================================= -->
+         ============================== -->
 
     <preference
         name="StatusBarStyle"
@@ -95,9 +80,21 @@
         name="StatusBarBackgroundColor"
         value="#10182D" />
 
-    <!-- =================================================
-         ANDROID APP LABEL
-         ================================================= -->
+    <!-- ==============================
+         SPLASH SCREEN
+         ============================== -->
+
+    <preference
+        name="SplashScreenDelay"
+        value="0" />
+
+    <preference
+        name="AutoHideSplashScreen"
+        value="true" />
+
+    <!-- ==============================
+         ANDROID APPLICATION SETTINGS
+         ============================== -->
 
     <edit-config
         file="app/src/main/AndroidManifest.xml"
