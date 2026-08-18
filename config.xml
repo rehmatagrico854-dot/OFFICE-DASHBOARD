@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<widget
+    id="com.rehmat.myoffice"
+    version="1.0.0"
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+
+    <name>My Office</name>
+
+    <description>
+        My personal offline office management application.
+    </description>
+
+    <author email="rehmat@example.com">
+        My Office
+    </author>
+
+    <content src="index.html" />
+
+    <access origin="*" />
+
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+
+    <preference
+        name="DisallowOverscroll"
+        value="true" />
+
+    <preference
+        name="Fullscreen"
+        value="false" />
+
+    <preference
+        name="Orientation"
+        value="portrait" />
+
+    <platform name="android">
+
+        <preference
+            name="AndroidXEnabled"
+            value="true" />
+
+        <preference
+            name="android-minSdkVersion"
+            value="24" />
+
+        <preference
+            name="android-targetSdkVersion"
+            value="35" />
+
+    </platform>
+
+</widget>
