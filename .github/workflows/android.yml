@@ -28,6 +28,17 @@ jobs:
           java-version: 17
 
 
+      - name: Set Android SDK
+        uses: android-actions/setup-android@v3
+
+
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager "platform-tools"
+          sdkmanager "platforms;android-35"
+          sdkmanager "build-tools;35.0.0"
+
+
       - name: Install Cordova
         run: |
           npm install -g cordova
@@ -41,11 +52,6 @@ jobs:
       - name: Add Android platform
         run: |
           cordova platform add android
-
-
-      - name: Check Cordova requirements
-        run: |
-          cordova requirements
 
 
       - name: Build Android APK
