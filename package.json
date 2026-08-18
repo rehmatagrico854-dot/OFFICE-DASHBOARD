@@ -1,14 +1,22 @@
 {
   "name": "my-office",
+  "displayName": "My Office",
   "version": "1.0.0",
-  "description": "My personal offline office management application",
+  "description": "Offline office management application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"No tests specified\""
   },
-  "author": "My Office",
+  "author": "Rehmat",
   "license": "MIT",
   "dependencies": {
+    "cordova-android": "^14.0.1",
+    "cordova-plugin-camera": "^7.0.0",
+    "cordova-plugin-file": "^8.1.0",
+    "cordova-plugin-filechooser": "^1.2.0",
+    "cordova-plugin-local-notification": "^0.9.0"
+  },
+  "devDependencies": {
     "cordova": "^13.0.0"
   }
 }
