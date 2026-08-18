@@ -1,6 +1,6 @@
 /* =========================================================
-   MY OFFICE — APPLICATION ENGINE
-   Offline-first foundation
+   MY OFFICE
+   Offline Office Management
    ========================================================= */
 
 (function () {
@@ -38,7 +38,9 @@
                 localStorage.getItem(STORAGE_KEY);
 
             if (!saved) {
-                return structuredClone(defaultData);
+                return JSON.parse(
+                    JSON.stringify(defaultData)
+                );
             }
 
             const parsed =
@@ -52,11 +54,13 @@
         } catch (error) {
 
             console.error(
-                "Unable to load My Office data:",
+                "My Office data loading error:",
                 error
             );
 
-            return structuredClone(defaultData);
+            return JSON.parse(
+                JSON.stringify(defaultData)
+            );
         }
     }
 
@@ -73,8 +77,12 @@
         } catch (error) {
 
             console.error(
-                "Unable to save My Office data:",
+                "My Office data saving error:",
                 error
+            );
+
+            alert(
+                "There was a problem saving this information."
             );
         }
     }
@@ -82,7 +90,7 @@
 
 
     /* =====================================================
-       HELPERS
+       BASIC HELPERS
     ===================================================== */
 
     function $(id) {
@@ -184,6 +192,17 @@
     }
 
 
+    function escapeHtml(value) {
+
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
 
     /* =====================================================
        NAVIGATION
@@ -195,9 +214,7 @@
             .querySelectorAll(".screen")
             .forEach(function (screen) {
 
-                screen.classList.remove(
-                    "active"
-                );
+                screen.classList.remove("active");
 
             });
 
@@ -207,9 +224,7 @@
 
         if (selected) {
 
-            selected.classList.add(
-                "active"
-            );
+            selected.classList.add("active");
 
         }
 
@@ -218,18 +233,14 @@
             .querySelectorAll(".nav-item")
             .forEach(function (item) {
 
-                item.classList.remove(
-                    "active"
-                );
+                item.classList.remove("active");
 
                 if (
                     item.dataset.screen ===
                     screenId
                 ) {
 
-                    item.classList.add(
-                        "active"
-                    );
+                    item.classList.add("active");
 
                 }
 
@@ -289,13 +300,11 @@
             );
 
 
-        const upcomingReminders =
+        const activeReminders =
             officeData.reminders.filter(
                 function (reminder) {
 
-                    return (
-                        !reminder.completed
-                    );
+                    return !reminder.completed;
 
                 }
             );
@@ -306,19 +315,22 @@
             pendingLetters.length
         );
 
+
         setText(
             "taskCount",
             activeTasks.length
         );
+
 
         setText(
             "matterCount",
             activeMatters.length
         );
 
+
         setText(
             "reminderCount",
-            upcomingReminders.length
+            activeReminders.length
         );
 
 
@@ -326,7 +338,7 @@
             pendingLetters.length +
             activeTasks.length +
             activeMatters.length +
-            upcomingReminders.length;
+            activeReminders.length;
 
 
         setText(
@@ -353,7 +365,7 @@
 
 
         const progress =
-            totalTasks > 0
+            totalTasks
                 ? Math.round(
                     (
                         completedTasks /
@@ -365,6 +377,7 @@
 
         const progressBar =
             $("progressBar");
+
 
         if (progressBar) {
 
@@ -390,13 +403,14 @@
 
 
     /* =====================================================
-       ATTENTION LIST
+       ATTENTION
     ===================================================== */
 
     function renderAttention() {
 
         const container =
             $("attentionList");
+
 
         if (!container) {
             return;
@@ -407,57 +421,24 @@
             todayISO();
 
 
-        const urgentLetters =
-            officeData.letters
-                .filter(function (letter) {
-
-                    if (
-                        letter.status ===
-                        "responded"
-                    ) {
-                        return false;
-                    }
-
-                    return (
-                        letter.responseDue &&
-                        letter.responseDue <=
-                        today
-                    );
-
-                })
-                .slice(0, 5);
-
-
-        const urgentTasks =
-            officeData.tasks
-                .filter(function (task) {
-
-                    if (
-                        task.status ===
-                        "completed"
-                    ) {
-                        return false;
-                    }
-
-                    return (
-                        task.dueDate &&
-                        task.dueDate <=
-                        today
-                    );
-
-                })
-                .slice(0, 5);
-
-
         const items = [];
 
 
-        urgentLetters.forEach(
-            function (letter) {
+        officeData.letters
+            .filter(function (letter) {
+
+                return (
+                    letter.status !==
+                    "responded" &&
+                    letter.responseDue &&
+                    letter.responseDue <= today
+                );
+
+            })
+            .slice(0, 5)
+            .forEach(function (letter) {
 
                 items.push({
-
-                    type: "letter",
 
                     title:
                         letter.subject ||
@@ -471,20 +452,29 @@
                             letter.responseDue
                         ),
 
-                    icon: "✉"
+                    icon:
+                        "✉"
 
                 });
 
-            }
-        );
+            });
 
 
-        urgentTasks.forEach(
-            function (task) {
+        officeData.tasks
+            .filter(function (task) {
+
+                return (
+                    task.status !==
+                    "completed" &&
+                    task.dueDate &&
+                    task.dueDate <= today
+                );
+
+            })
+            .slice(0, 5)
+            .forEach(function (task) {
 
                 items.push({
-
-                    type: "task",
 
                     title:
                         task.title ||
@@ -498,12 +488,12 @@
                             task.dueDate
                         ),
 
-                    icon: "✓"
+                    icon:
+                        "✓"
 
                 });
 
-            }
-        );
+            });
 
 
         if (!items.length) {
@@ -534,90 +524,77 @@
 
 
         container.innerHTML =
-            items
-                .map(function (item) {
+            items.map(function (item) {
 
-                    return `
+                return `
+
+                    <div
+                        style="
+                            display:flex;
+                            align-items:center;
+                            gap:12px;
+                            padding:14px;
+                            margin-bottom:8px;
+                            border:1px solid #e8ecf3;
+                            border-radius:16px;
+                            background:#fff;
+                        ">
 
                         <div
-                            class="attention-item"
                             style="
+                                width:38px;
+                                height:38px;
                                 display:flex;
                                 align-items:center;
-                                gap:12px;
-                                padding:14px;
-                                margin-bottom:8px;
-                                border:1px solid #e8ecf3;
-                                border-radius:16px;
-                                background:#fff;
+                                justify-content:center;
+                                border-radius:12px;
+                                background:#eef2ff;
+                                color:#4f46e5;
                             ">
 
-                            <div
-                                style="
-                                    width:38px;
-                                    height:38px;
-                                    display:flex;
-                                    align-items:center;
-                                    justify-content:center;
-                                    border-radius:12px;
-                                    background:#eef2ff;
-                                    color:#4f46e5;
-                                    flex-shrink:0;
-                                ">
+                            ${item.icon}
 
-                                ${item.icon}
+                        </div>
 
-                            </div>
+                        <div
+                            style="
+                                flex:1;
+                            ">
 
-                            <div
-                                style="
-                                    flex:1;
-                                    min-width:0;
-                                ">
-
-                                <strong
-                                    style="
-                                        display:block;
-                                        font-size:12px;
-                                    ">
-
-                                    ${escapeHtml(
-                                        item.title
-                                    )}
-
-                                </strong>
-
-                                <span
-                                    style="
-                                        display:block;
-                                        margin-top:3px;
-                                        color:#667085;
-                                        font-size:10px;
-                                    ">
-
-                                    ${item.text}
-
-                                </span>
-
-                            </div>
+                            <strong>
+                                ${escapeHtml(
+                                    item.title
+                                )}
+                            </strong>
 
                             <small
                                 style="
-                                    color:#dc2626;
-                                    font-size:10px;
-                                    font-weight:700;
+                                    display:block;
+                                    margin-top:3px;
+                                    color:#667085;
                                 ">
 
-                                ${item.date}
+                                ${item.text}
 
                             </small>
 
                         </div>
 
-                    `;
+                        <small
+                            style="
+                                color:#dc2626;
+                                font-weight:700;
+                            ">
 
-                })
-                .join("");
+                            ${item.date}
+
+                        </small>
+
+                    </div>
+
+                `;
+
+            }).join("");
     }
 
 
@@ -677,15 +654,79 @@
             pending.length
         );
 
+
         setText(
             "dueLetterTotal",
             dueToday.length
         );
 
+
         setText(
             "overdueLetterTotal",
             overdue.length
         );
+    }
+
+
+
+    /* =====================================================
+       LETTER STATUS
+    ===================================================== */
+
+    function getLetterStatus(letter) {
+
+        if (
+            letter.status ===
+            "responded"
+        ) {
+
+            return {
+                label: "RESPONDED",
+                color: "#059669",
+                background: "#ecfdf5"
+            };
+
+        }
+
+
+        const today =
+            todayISO();
+
+
+        if (
+            letter.responseDue &&
+            letter.responseDue <
+            today
+        ) {
+
+            return {
+                label: "OVERDUE",
+                color: "#dc2626",
+                background: "#fef2f2"
+            };
+
+        }
+
+
+        if (
+            letter.responseDue ===
+            today
+        ) {
+
+            return {
+                label: "DUE TODAY",
+                color: "#ea580c",
+                background: "#fff7ed"
+            };
+
+        }
+
+
+        return {
+            label: "PENDING",
+            color: "#4f46e5",
+            background: "#eef2ff"
+        };
     }
 
 
@@ -698,6 +739,7 @@
 
         const container =
             $("lettersList");
+
 
         if (!container) {
             return;
@@ -758,18 +800,21 @@
                         <div
                             class="letter-card"
                             style="
-                                margin-bottom:11px;
+                                margin-bottom:12px;
                                 padding:16px;
                                 border:1px solid #e8ecf3;
                                 border-radius:18px;
                                 background:#fff;
-                                box-shadow:0 3px 12px rgba(16,24,40,.04);
+                                box-shadow:
+                                    0 3px 12px
+                                    rgba(16,24,40,.04);
                             ">
 
                             <div
                                 style="
                                     display:flex;
-                                    justify-content:space-between;
+                                    justify-content:
+                                        space-between;
                                     gap:10px;
                                 ">
 
@@ -812,15 +857,34 @@
 
                                     </strong>
 
+                                    <small
+                                        style="
+                                            display:block;
+                                            margin-top:4px;
+                                            color:#667085;
+                                        ">
+
+                                        ${
+                                            escapeHtml(
+                                                letter.sender ||
+                                                ""
+                                            )
+                                        }
+
+                                    </small>
+
                                 </div>
+
 
                                 <span
                                     style="
                                         height:max-content;
                                         padding:5px 8px;
                                         border-radius:8px;
-                                        background:${status.background};
-                                        color:${status.color};
+                                        background:
+                                            ${status.background};
+                                        color:
+                                            ${status.color};
                                         font-size:9px;
                                         font-weight:800;
                                         white-space:nowrap;
@@ -836,8 +900,9 @@
                             <div
                                 style="
                                     display:grid;
-                                    grid-template-columns:1fr 1fr;
-                                    gap:9px;
+                                    grid-template-columns:
+                                        1fr 1fr;
+                                    gap:10px;
                                     margin-top:14px;
                                 ">
 
@@ -847,19 +912,17 @@
                                         style="
                                             display:block;
                                             color:#98a2b3;
-                                            font-size:9px;
                                         ">
 
                                         Received
 
                                     </small>
 
-                                    <span
+                                    <strong
                                         style="
                                             display:block;
                                             margin-top:3px;
                                             font-size:11px;
-                                            font-weight:700;
                                         ">
 
                                         ${
@@ -868,7 +931,7 @@
                                             )
                                         }
 
-                                    </span>
+                                    </strong>
 
                                 </div>
 
@@ -879,19 +942,17 @@
                                         style="
                                             display:block;
                                             color:#98a2b3;
-                                            font-size:9px;
                                         ">
 
                                         Response due
 
                                     </small>
 
-                                    <span
+                                    <strong
                                         style="
                                             display:block;
                                             margin-top:3px;
                                             font-size:11px;
-                                            font-weight:700;
                                         ">
 
                                         ${
@@ -900,54 +961,176 @@
                                             )
                                         }
 
-                                    </span>
+                                    </strong>
 
                                 </div>
 
                             </div>
 
 
+                            <!-- ATTACHMENT AREA -->
+
                             <div
                                 style="
-                                    display:flex;
-                                    gap:7px;
-                                    margin-top:14px;
+                                    margin-top:16px;
+                                    padding-top:14px;
+                                    border-top:
+                                        1px solid #eef0f4;
                                 ">
 
-                                ${
-                                    letter.receivedCopy
-                                        ? `<span
-                                            style="
-                                                padding:5px 8px;
-                                                border-radius:8px;
-                                                background:#ecfeff;
-                                                color:#0891b2;
-                                                font-size:9px;
-                                                font-weight:700;
-                                            ">
-                                            📎 Received copy
-                                           </span>`
-                                        : ""
-                                }
+                                <div
+                                    style="
+                                        font-size:10px;
+                                        font-weight:800;
+                                        margin-bottom:9px;
+                                        color:#344054;
+                                    ">
+
+                                    LETTER DOCUMENTS
+
+                                </div>
 
 
-                                ${
-                                    letter.responseCopy
-                                        ? `<span
-                                            style="
-                                                padding:5px 8px;
-                                                border-radius:8px;
-                                                background:#ecfdf5;
-                                                color:#059669;
-                                                font-size:9px;
-                                                font-weight:700;
-                                            ">
-                                            📎 Response copy
-                                           </span>`
-                                        : ""
-                                }
+                                <div
+                                    style="
+                                        display:grid;
+                                        grid-template-columns:
+                                            1fr 1fr;
+                                        gap:7px;
+                                    ">
+
+                                    <button
+                                        class="attachment-button"
+                                        data-camera-letter="${
+                                            letter.id
+                                        }">
+
+                                        📷
+                                        Received
+
+                                    </button>
+
+
+                                    <button
+                                        class="attachment-button"
+                                        data-file-letter="${
+                                            letter.id
+                                        }">
+
+                                        📄
+                                        Received PDF
+
+                                    </button>
+
+
+                                    <button
+                                        class="attachment-button"
+                                        data-camera-response="${
+                                            letter.id
+                                        }">
+
+                                        📷
+                                        Response
+
+                                    </button>
+
+
+                                    <button
+                                        class="attachment-button"
+                                        data-file-response="${
+                                            letter.id
+                                        }">
+
+                                        📄
+                                        Response PDF
+
+                                    </button>
+
+                                </div>
+
+
+                                <div
+                                    style="
+                                        display:flex;
+                                        flex-wrap:wrap;
+                                        gap:6px;
+                                        margin-top:9px;
+                                    ">
+
+                                    ${
+                                        letter.receivedCopy
+                                            ? `
+                                            <span
+                                                style="
+                                                    padding:5px 8px;
+                                                    border-radius:8px;
+                                                    background:#ecfeff;
+                                                    color:#0891b2;
+                                                    font-size:9px;
+                                                    font-weight:700;
+                                                ">
+
+                                                ✓ Received copy saved
+
+                                            </span>
+                                            `
+                                            : ""
+                                    }
+
+
+                                    ${
+                                        letter.responseCopy
+                                            ? `
+                                            <span
+                                                style="
+                                                    padding:5px 8px;
+                                                    border-radius:8px;
+                                                    background:#ecfdf5;
+                                                    color:#059669;
+                                                    font-size:9px;
+                                                    font-weight:700;
+                                                ">
+
+                                                ✓ Response copy saved
+
+                                            </span>
+                                            `
+                                            : ""
+                                    }
+
+                                </div>
 
                             </div>
+
+
+                            <!-- RESPONSE REMINDER -->
+
+                            ${
+                                letter.reminderLetterDate
+                                    ? `
+                                    <div
+                                        style="
+                                            margin-top:12px;
+                                            padding:10px;
+                                            border-radius:12px;
+                                            background:#fff7ed;
+                                            color:#9a3412;
+                                            font-size:10px;
+                                        ">
+
+                                        🔔 Reminder letter:
+                                        <strong>
+                                            ${
+                                                formatDate(
+                                                    letter.reminderLetterDate
+                                                )
+                                            }
+                                        </strong>
+
+                                    </div>
+                                    `
+                                    : ""
+                            }
 
                         </div>
 
@@ -958,76 +1141,377 @@
     }
 
 
-    function getLetterStatus(letter) {
 
-        if (
-            letter.status ===
-            "responded"
-        ) {
+    /* =====================================================
+       ADD LETTER
+    ===================================================== */
 
-            return {
+    function addLetter() {
 
-                label: "RESPONDED",
+        const reference =
+            prompt(
+                "Letter reference number:"
+            );
 
-                color: "#059669",
 
-                background: "#ecfdf5"
+        if (reference === null) {
+            return;
+        }
 
-            };
+
+        const subject =
+            prompt(
+                "Letter subject:"
+            );
+
+
+        if (subject === null) {
+            return;
+        }
+
+
+        const sender =
+            prompt(
+                "From whom / department:"
+            ) || "";
+
+
+        const receivedDate =
+            prompt(
+                "Date received (YYYY-MM-DD):",
+                todayISO()
+            ) || todayISO();
+
+
+        const responseRequired =
+            confirm(
+                "Is a response required?"
+            );
+
+
+        let responseDue =
+            "";
+
+
+        let reminderLetterDate =
+            "";
+
+
+        if (responseRequired) {
+
+            responseDue =
+                prompt(
+                    "Response due date (YYYY-MM-DD):"
+                ) || "";
+
+
+            reminderLetterDate =
+                prompt(
+                    "On which date should I remind you to give the reminder letter? (YYYY-MM-DD)"
+                ) || "";
 
         }
 
 
-        const today =
-            todayISO();
+        officeData.letters.push({
+
+            id:
+                generateId("letter"),
+
+            reference:
+                reference.trim(),
+
+            subject:
+                subject.trim(),
+
+            sender:
+                sender.trim(),
+
+            receivedDate:
+                receivedDate,
+
+            responseRequired:
+                responseRequired,
+
+            responseDue:
+                responseDue,
+
+            reminderLetterDate:
+                reminderLetterDate,
+
+            status:
+                "pending",
+
+            receivedCopy:
+                null,
+
+            responseCopy:
+                null,
+
+            notes:
+                "",
+
+            createdAt:
+                new Date().toISOString()
+
+        });
 
 
-        if (
-            letter.responseDue &&
-            letter.responseDue <
-            today
-        ) {
+        saveData();
 
-            return {
+        refreshAll();
 
-                label: "OVERDUE",
+        showScreen(
+            "lettersScreen"
+        );
 
-                color: "#dc2626",
 
-                background: "#fef2f2"
+        alert(
+            "Letter added successfully."
+        );
+    }
 
-            };
 
+
+    /* =====================================================
+       ATTACHMENT HELPERS
+    ===================================================== */
+
+    function findLetter(letterId) {
+
+        return officeData.letters.find(
+            function (letter) {
+
+                return (
+                    letter.id ===
+                    letterId
+                );
+
+            }
+        );
+    }
+
+
+
+    /* =====================================================
+       CAMERA
+    ===================================================== */
+
+    function takePhoto(
+        letterId,
+        type
+    ) {
+
+        const letter =
+            findLetter(letterId);
+
+
+        if (!letter) {
+            return;
         }
 
 
         if (
-            letter.responseDue ===
-            today
+            typeof navigator ===
+            "undefined" ||
+            !navigator.camera
         ) {
 
-            return {
+            alert(
+                "Camera is available after the Android APK is rebuilt with the camera feature."
+            );
 
-                label: "DUE TODAY",
-
-                color: "#ea580c",
-
-                background: "#fff7ed"
-
-            };
-
+            return;
         }
 
 
-        return {
+        navigator.camera.getPicture(
 
-            label: "PENDING",
+            function (imageData) {
 
-            color: "#4f46e5",
+                const attachment = {
 
-            background: "#eef2ff"
+                    type:
+                        "image",
 
-        };
+                    uri:
+                        imageData,
+
+                    name:
+                        type ===
+                        "received"
+                            ? "Received letter"
+                            : "Response copy",
+
+                    addedAt:
+                        new Date().toISOString()
+
+                };
+
+
+                if (
+                    type ===
+                    "received"
+                ) {
+
+                    letter.receivedCopy =
+                        attachment;
+
+                } else {
+
+                    letter.responseCopy =
+                        attachment;
+
+                }
+
+
+                saveData();
+
+                refreshAll();
+
+
+                alert(
+                    type === "received"
+                        ? "Received letter scan saved."
+                        : "Response copy saved."
+                );
+
+            },
+
+
+            function (error) {
+
+                console.log(
+                    "Camera cancelled/error:",
+                    error
+                );
+
+            },
+
+
+            {
+
+                quality: 80,
+
+                destinationType:
+                    Camera.DestinationType.DATA_URL,
+
+                sourceType:
+                    Camera.PictureSourceType.CAMERA,
+
+                encodingType:
+                    Camera.EncodingType.JPEG,
+
+                mediaType:
+                    Camera.MediaType.PICTURE,
+
+                correctOrientation:
+                    true,
+
+                saveToPhotoAlbum:
+                    false
+
+            }
+
+        );
+    }
+
+
+
+    /* =====================================================
+       FILE SELECTOR
+    ===================================================== */
+
+    function chooseFile(
+        letterId,
+        type
+    ) {
+
+        const letter =
+            findLetter(letterId);
+
+
+        if (!letter) {
+            return;
+        }
+
+
+        if (
+            typeof window.fileChooser ===
+            "undefined"
+        ) {
+
+            alert(
+                "The document picker is available after the Android APK is rebuilt with the file feature."
+            );
+
+            return;
+        }
+
+
+        window.fileChooser.open(
+
+            function (uri) {
+
+                const attachment = {
+
+                    type:
+                        "file",
+
+                    uri:
+                        uri,
+
+                    name:
+                        type ===
+                        "received"
+                            ? "Received letter"
+                            : "Response copy",
+
+                    addedAt:
+                        new Date().toISOString()
+
+                };
+
+
+                if (
+                    type ===
+                    "received"
+                ) {
+
+                    letter.receivedCopy =
+                        attachment;
+
+                } else {
+
+                    letter.responseCopy =
+                        attachment;
+
+                }
+
+
+                saveData();
+
+                refreshAll();
+
+
+                alert(
+                    type === "received"
+                        ? "Received document attached."
+                        : "Response document attached."
+                );
+
+            },
+
+            function (error) {
+
+                console.log(
+                    "File selection cancelled/error:",
+                    error
+                );
+
+            }
+
+        );
     }
 
 
@@ -1040,6 +1524,7 @@
 
         const container =
             $("tasksList");
+
 
         if (!container) {
             return;
@@ -1062,8 +1547,7 @@
 
                     <p>
                         Add your office tasks and
-                        keep track of everything
-                        that needs to be done.
+                        keep track of everything.
                     </p>
 
                     <button
@@ -1108,7 +1592,9 @@
                             ">
 
                             <button
-                                data-complete-task="${task.id}"
+                                data-complete-task="${
+                                    task.id
+                                }"
                                 style="
                                     width:34px;
                                     height:34px;
@@ -1138,7 +1624,6 @@
                             <div
                                 style="
                                     flex:1;
-                                    min-width:0;
                                 ">
 
                                 <strong
@@ -1160,12 +1645,12 @@
 
                                 </strong>
 
+
                                 <small
                                     style="
                                         display:block;
                                         margin-top:4px;
                                         color:#667085;
-                                        font-size:9px;
                                     ">
 
                                     ${
@@ -1191,6 +1676,98 @@
 
 
 
+    function addTask() {
+
+        const title =
+            prompt(
+                "Task title:"
+            );
+
+
+        if (
+            title === null ||
+            !title.trim()
+        ) {
+            return;
+        }
+
+
+        const dueDate =
+            prompt(
+                "Due date (YYYY-MM-DD), optional:"
+            ) || "";
+
+
+        officeData.tasks.push({
+
+            id:
+                generateId("task"),
+
+            title:
+                title.trim(),
+
+            dueDate:
+                dueDate,
+
+            status:
+                "pending",
+
+            createdAt:
+                new Date().toISOString()
+
+        });
+
+
+        saveData();
+
+        refreshAll();
+
+        showScreen(
+            "workScreen"
+        );
+
+
+        alert(
+            "Task added successfully."
+        );
+    }
+
+
+
+    function toggleTask(taskId) {
+
+        const task =
+            officeData.tasks.find(
+                function (item) {
+
+                    return (
+                        item.id ===
+                        taskId
+                    );
+
+                }
+            );
+
+
+        if (!task) {
+            return;
+        }
+
+
+        task.status =
+            task.status ===
+            "completed"
+                ? "pending"
+                : "completed";
+
+
+        saveData();
+
+        refreshAll();
+    }
+
+
+
     /* =====================================================
        REMINDERS
     ===================================================== */
@@ -1199,6 +1776,7 @@
 
         const container =
             $("reminderList");
+
 
         if (!container) {
             return;
@@ -1209,9 +1787,7 @@
             officeData.reminders.filter(
                 function (reminder) {
 
-                    return (
-                        !reminder.completed
-                    );
+                    return !reminder.completed;
 
                 }
             );
@@ -1289,10 +1865,8 @@
 
                             </div>
 
-                            <div
-                                style="
-                                    flex:1;
-                                ">
+
+                            <div>
 
                                 <strong
                                     style="
@@ -1308,12 +1882,12 @@
 
                                 </strong>
 
+
                                 <small
                                     style="
                                         display:block;
                                         margin-top:4px;
                                         color:#667085;
-                                        font-size:9px;
                                     ">
 
                                     ${
@@ -1336,206 +1910,13 @@
 
 
 
-    /* =====================================================
-       QUICK ADD
-    ===================================================== */
-
-    function addLetter() {
-
-        const reference =
-            prompt(
-                "Letter reference number:"
-            );
-
-        if (reference === null) {
-            return;
-        }
-
-
-        const subject =
-            prompt(
-                "Letter subject:"
-            );
-
-        if (subject === null) {
-            return;
-        }
-
-
-        const sender =
-            prompt(
-                "From whom / department:"
-            ) || "";
-
-
-        const receivedDate =
-            prompt(
-                "Date received (YYYY-MM-DD):",
-                todayISO()
-            ) || todayISO();
-
-
-        const responseRequired =
-            confirm(
-                "Is a response required?"
-            );
-
-
-        let responseDue = "";
-
-
-        if (responseRequired) {
-
-            responseDue =
-                prompt(
-                    "Response due date (YYYY-MM-DD):"
-                ) || "";
-
-        }
-
-
-        let reminderLetterDate = "";
-
-
-        if (responseRequired) {
-
-            reminderLetterDate =
-                prompt(
-                    "Reminder letter date (YYYY-MM-DD), if required:"
-                ) || "";
-
-        }
-
-
-        const letter = {
-
-            id:
-                generateId("letter"),
-
-            reference:
-                reference.trim(),
-
-            subject:
-                subject.trim(),
-
-            sender:
-                sender.trim(),
-
-            receivedDate:
-
-                receivedDate,
-
-            responseRequired:
-                responseRequired,
-
-            responseDue:
-                responseDue,
-
-            reminderLetterDate:
-                reminderLetterDate,
-
-            status:
-                "pending",
-
-            receivedCopy:
-                null,
-
-            responseCopy:
-                null,
-
-            notes:
-                "",
-
-            createdAt:
-                new Date().toISOString()
-
-        };
-
-
-        officeData.letters.push(
-            letter
-        );
-
-
-        saveData();
-
-        refreshAll();
-
-        showScreen(
-            "lettersScreen"
-        );
-
-
-        alert(
-            "Letter added successfully."
-        );
-    }
-
-
-
-    function addTask() {
-
-        const title =
-            prompt(
-                "Task title:"
-            );
-
-        if (
-            title === null ||
-            !title.trim()
-        ) {
-            return;
-        }
-
-
-        const dueDate =
-            prompt(
-                "Due date (YYYY-MM-DD), optional:"
-            ) || "";
-
-
-        officeData.tasks.push({
-
-            id:
-                generateId("task"),
-
-            title:
-                title.trim(),
-
-            dueDate:
-                dueDate,
-
-            status:
-                "pending",
-
-            createdAt:
-                new Date().toISOString()
-
-        });
-
-
-        saveData();
-
-        refreshAll();
-
-        showScreen(
-            "workScreen"
-        );
-
-
-        alert(
-            "Task added successfully."
-        );
-    }
-
-
-
     function addReminder() {
 
         const title =
             prompt(
                 "Reminder:"
             );
+
 
         if (
             title === null ||
@@ -1595,6 +1976,7 @@
                 "Write your office note:"
             );
 
+
         if (
             note === null ||
             !note.trim()
@@ -1628,44 +2010,7 @@
 
 
     /* =====================================================
-       TASK COMPLETION
-    ===================================================== */
-
-    function toggleTask(taskId) {
-
-        const task =
-            officeData.tasks.find(
-                function (item) {
-
-                    return (
-                        item.id ===
-                        taskId
-                    );
-
-                }
-            );
-
-
-        if (!task) {
-            return;
-        }
-
-
-        task.status =
-            task.status === "completed"
-                ? "pending"
-                : "completed";
-
-
-        saveData();
-
-        refreshAll();
-    }
-
-
-
-    /* =====================================================
-       EVENT HANDLING
+       CLICK EVENTS
     ===================================================== */
 
     document.addEventListener(
@@ -1684,6 +2029,7 @@
                 const screen =
                     nav.dataset.screen;
 
+
                 if (screen) {
 
                     showScreen(
@@ -1694,7 +2040,6 @@
 
                 return;
             }
-
 
 
             const dashboard =
@@ -1708,6 +2053,7 @@
                 const screen =
                     dashboard.dataset.screen;
 
+
                 if (screen) {
 
                     showScreen(
@@ -1718,7 +2064,6 @@
 
                 return;
             }
-
 
 
             const action =
@@ -1737,21 +2082,24 @@
                     addLetter();
                 }
 
+
                 if (type === "task") {
                     addTask();
                 }
+
 
                 if (type === "reminder") {
                     addReminder();
                 }
 
+
                 if (type === "note") {
                     addNote();
                 }
 
+
                 return;
             }
-
 
 
             const taskButton =
@@ -1767,6 +2115,99 @@
                         .completeTask
                 );
 
+                return;
+            }
+
+
+            /* =============================================
+               RECEIVED LETTER CAMERA
+            ============================================== */
+
+            const cameraLetter =
+                event.target.closest(
+                    "[data-camera-letter]"
+                );
+
+
+            if (cameraLetter) {
+
+                takePhoto(
+                    cameraLetter.dataset
+                        .cameraLetter,
+
+                    "received"
+                );
+
+                return;
+            }
+
+
+            /* =============================================
+               RECEIVED LETTER FILE
+            ============================================== */
+
+            const fileLetter =
+                event.target.closest(
+                    "[data-file-letter]"
+                );
+
+
+            if (fileLetter) {
+
+                chooseFile(
+                    fileLetter.dataset
+                        .fileLetter,
+
+                    "received"
+                );
+
+                return;
+            }
+
+
+            /* =============================================
+               RESPONSE CAMERA
+            ============================================== */
+
+            const cameraResponse =
+                event.target.closest(
+                    "[data-camera-response]"
+                );
+
+
+            if (cameraResponse) {
+
+                takePhoto(
+                    cameraResponse.dataset
+                        .cameraResponse,
+
+                    "response"
+                );
+
+                return;
+            }
+
+
+            /* =============================================
+               RESPONSE FILE
+            ============================================== */
+
+            const fileResponse =
+                event.target.closest(
+                    "[data-file-response]"
+                );
+
+
+            if (fileResponse) {
+
+                chooseFile(
+                    fileResponse.dataset
+                        .fileResponse,
+
+                    "response"
+                );
+
+                return;
             }
 
         }
@@ -1775,7 +2216,7 @@
 
 
     /* =====================================================
-       INITIALIZATION
+       REFRESH
     ===================================================== */
 
     function refreshAll() {
@@ -1792,6 +2233,11 @@
 
     }
 
+
+
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
 
     function initialize() {
 
@@ -1811,48 +2257,11 @@
 
 
         console.log(
-            "My Office is running in offline mode."
+            "My Office initialized successfully."
         );
 
     }
 
-
-
-    /* =====================================================
-       HTML SAFETY
-    ===================================================== */
-
-    function escapeHtml(value) {
-
-        return String(value)
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
-    }
-
-
-
-    /* =====================================================
-       START
-    ===================================================== */
 
     if (
         document.readyState ===
