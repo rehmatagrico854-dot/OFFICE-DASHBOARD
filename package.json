@@ -10,8 +10,7 @@
     "cordova-android": "^14.0.1",
     "cordova-plugin-camera": "^8.0.0",
     "cordova-plugin-file": "^8.1.0",
-    "cordova-plugin-filechooser": "^1.0.0",
-    "cordova-plugin-local-notification": "^0.9.0"
+    "cordova-plugin-filechooser": "^1.0.0"
   },
   "devDependencies": {
     "cordova": "^13.0.0"
@@ -23,8 +22,7 @@
     "plugins": {
       "cordova-plugin-camera": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-filechooser": {},
-      "cordova-plugin-local-notification": {}
+      "cordova-plugin-filechooser": {}
     }
   }
 }
