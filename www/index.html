@@ -7,7 +7,7 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <meta
         name="theme-color"
@@ -24,18 +24,878 @@
 
 <body>
 
-    <div id="app">
+<div id="app">
 
-        <h1>My Office</h1>
 
-        <p>
-            Your office management system
-        </p>
+    <!-- =========================================
+         TOP HEADER
+    ========================================== -->
 
-    </div>
+    <header class="app-header">
 
+        <div class="brand-area">
+
+            <div class="brand-logo">
+                MO
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    My Office
+                </div>
+
+                <div
+                    class="today-date"
+                    id="currentDate">
+                    Loading...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="header-action"
+            id="settingsButton"
+            aria-label="Settings">
+
+            ⚙
+
+        </button>
+
+    </header>
+
+
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =====================================
+             HOME
+        ====================================== -->
+
+        <section
+            id="homeScreen"
+            class="screen active">
+
+
+            <div class="welcome-area">
+
+                <span class="section-kicker">
+                    OFFICE COMMAND CENTRE
+                </span>
+
+                <h1 id="greeting">
+                    Good evening
+                </h1>
+
+                <p>
+                    Everything important,
+                    organised in one place.
+                </p>
+
+            </div>
+
+
+
+            <!-- TODAY CARD -->
+
+            <div class="hero-card">
+
+                <div class="hero-card-top">
+
+                    <div>
+
+                        <span class="hero-label">
+                            TODAY'S OVERVIEW
+                        </span>
+
+                        <h2 id="todayMessage">
+                            Your workspace is ready
+                        </h2>
+
+                    </div>
+
+
+                    <div class="hero-symbol">
+                        ✦
+                    </div>
+
+                </div>
+
+
+                <div class="hero-progress">
+
+                    <div
+                        id="progressBar">
+                    </div>
+
+                </div>
+
+
+                <div class="hero-footer">
+
+                    <span>
+                        Office matters
+                    </span>
+
+                    <strong id="totalItems">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SUMMARY -->
+
+            <div class="section-title-row">
+
+                <h2>
+                    At a glance
+                </h2>
+
+                <span>
+                    Today
+                </span>
+
+            </div>
+
+
+            <div class="dashboard-grid">
+
+
+                <button
+                    class="dashboard-card"
+                    data-screen="lettersScreen">
+
+                    <div
+                        class="dashboard-icon icon-letter">
+                        ✉
+                    </div>
+
+                    <strong
+                        id="letterCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Letters
+                    </span>
+
+                    <small>
+                        Pending
+                    </small>
+
+                </button>
+
+
+
+                <button
+                    class="dashboard-card"
+                    data-screen="workScreen">
+
+                    <div
+                        class="dashboard-icon icon-task">
+                        ✓
+                    </div>
+
+                    <strong
+                        id="taskCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Tasks
+                    </span>
+
+                    <small>
+                        Active
+                    </small>
+
+                </button>
+
+
+
+                <button
+                    class="dashboard-card"
+                    data-screen="officeScreen">
+
+                    <div
+                        class="dashboard-icon icon-reminder">
+                        ◷
+                    </div>
+
+                    <strong
+                        id="reminderCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Reminders
+                    </span>
+
+                    <small>
+                        Upcoming
+                    </small>
+
+                </button>
+
+
+
+                <button
+                    class="dashboard-card"
+                    data-screen="workScreen">
+
+                    <div
+                        class="dashboard-icon icon-matter">
+                        ◆
+                    </div>
+
+                    <strong
+                        id="matterCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Matters
+                    </span>
+
+                    <small>
+                        Active
+                    </small>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- ATTENTION -->
+
+            <div class="section-title-row">
+
+                <h2>
+                    Needs your attention
+                </h2>
+
+            </div>
+
+
+            <div id="attentionList">
+
+                <div class="empty-state">
+
+                    <div class="empty-state-icon">
+                        ✦
+                    </div>
+
+                    <h3>
+                        Nothing urgent
+                    </h3>
+
+                    <p>
+                        Your important office matters
+                        will appear here.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="section-title-row">
+
+                <h2>
+                    Quick add
+                </h2>
+
+            </div>
+
+
+            <div class="quick-add-grid">
+
+
+                <button
+                    class="quick-add"
+                    data-action="letter">
+
+                    <span>
+                        ✉
+                    </span>
+
+                    <strong>
+                        Letter
+                    </strong>
+
+                </button>
+
+
+                <button
+                    class="quick-add"
+                    data-action="task">
+
+                    <span>
+                        ✓
+                    </span>
+
+                    <strong>
+                        Task
+                    </strong>
+
+                </button>
+
+
+                <button
+                    class="quick-add"
+                    data-action="reminder">
+
+                    <span>
+                        ◷
+                    </span>
+
+                    <strong>
+                        Reminder
+                    </strong>
+
+                </button>
+
+
+                <button
+                    class="quick-add"
+                    data-action="note">
+
+                    <span>
+                        ✎
+                    </span>
+
+                    <strong>
+                        Note
+                    </strong>
+
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             WORK
+        ====================================== -->
+
+        <section
+            id="workScreen"
+            class="screen">
+
+
+            <div class="screen-header">
+
+                <div>
+
+                    <span class="section-kicker">
+                        WORKSPACE
+                    </span>
+
+                    <h1>
+                        Work
+                    </h1>
+
+                </div>
+
+
+                <button
+                    class="primary-button"
+                    data-action="task">
+
+                    + Task
+
+                </button>
+
+            </div>
+
+
+            <div class="tab-navigation">
+
+                <button class="tab active">
+                    Tasks
+                </button>
+
+                <button class="tab">
+                    Matters
+                </button>
+
+                <button class="tab">
+                    Projects
+                </button>
+
+                <button class="tab">
+                    Daily Log
+                </button>
+
+            </div>
+
+
+            <div id="tasksList">
+
+                <div class="empty-state large">
+
+                    <div class="empty-state-icon">
+                        ✓
+                    </div>
+
+                    <h3>
+                        No tasks yet
+                    </h3>
+
+                    <p>
+                        Add your office tasks and
+                        keep track of everything
+                        that needs to be done.
+                    </p>
+
+                    <button
+                        class="primary-button"
+                        data-action="task">
+
+                        + Add first task
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             LETTERS
+        ====================================== -->
+
+        <section
+            id="lettersScreen"
+            class="screen">
+
+
+            <div class="screen-header">
+
+                <div>
+
+                    <span class="section-kicker">
+                        CORRESPONDENCE
+                    </span>
+
+                    <h1>
+                        Letters
+                    </h1>
+
+                </div>
+
+
+                <button
+                    class="primary-button"
+                    data-action="letter">
+
+                    + Letter
+
+                </button>
+
+            </div>
+
+
+
+            <!-- LETTER STATISTICS -->
+
+            <div class="letter-statistics">
+
+
+                <div class="letter-stat">
+
+                    <span>
+                        Pending
+                    </span>
+
+                    <strong
+                        id="pendingLetterTotal">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="letter-stat">
+
+                    <span>
+                        Due today
+                    </span>
+
+                    <strong
+                        id="dueLetterTotal">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="letter-stat">
+
+                    <span>
+                        Overdue
+                    </span>
+
+                    <strong
+                        id="overdueLetterTotal">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LETTER TABS -->
+
+            <div class="tab-navigation">
+
+                <button class="tab active">
+                    All
+                </button>
+
+                <button class="tab">
+                    Pending
+                </button>
+
+                <button class="tab">
+                    Due
+                </button>
+
+                <button class="tab">
+                    Responded
+                </button>
+
+            </div>
+
+
+
+            <!-- LETTER LIST -->
+
+            <div id="lettersList">
+
+                <div class="empty-state large">
+
+                    <div class="empty-state-icon letter-empty">
+                        ✉
+                    </div>
+
+                    <h3>
+                        No letters yet
+                    </h3>
+
+                    <p>
+                        Received correspondence,
+                        response deadlines and
+                        scanned copies will appear here.
+                    </p>
+
+                    <button
+                        class="primary-button"
+                        data-action="letter">
+
+                        + Add first letter
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             OFFICE
+        ====================================== -->
+
+        <section
+            id="officeScreen"
+            class="screen">
+
+
+            <div class="screen-header">
+
+                <div>
+
+                    <span class="section-kicker">
+                        OFFICE TOOLS
+                    </span>
+
+                    <h1>
+                        Office
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="office-tools-grid">
+
+
+                <button class="office-tool">
+
+                    <div>
+                        ◷
+                    </div>
+
+                    <strong>
+                        Calendar
+                    </strong>
+
+                    <small>
+                        Meetings & deadlines
+                    </small>
+
+                </button>
+
+
+
+                <button class="office-tool">
+
+                    <div>
+                        ✎
+                    </div>
+
+                    <strong>
+                        Notes
+                    </strong>
+
+                    <small>
+                        Quick office notes
+                    </small>
+
+                </button>
+
+
+
+                <button class="office-tool">
+
+                    <div>
+                        ♙
+                    </div>
+
+                    <strong>
+                        Contacts
+                    </strong>
+
+                    <small>
+                        People & departments
+                    </small>
+
+                </button>
+
+
+
+                <button class="office-tool">
+
+                    <div>
+                        ▣
+                    </div>
+
+                    <strong>
+                        Documents
+                    </strong>
+
+                    <small>
+                        Office records
+                    </small>
+
+                </button>
+
+
+
+                <button class="office-tool">
+
+                    <div>
+                        ⌕
+                    </div>
+
+                    <strong>
+                        Search
+                    </strong>
+
+                    <small>
+                        Find anything
+                    </small>
+
+                </button>
+
+
+
+                <button class="office-tool">
+
+                    <div>
+                        ▥
+                    </div>
+
+                    <strong>
+                        Reports
+                    </strong>
+
+                    <small>
+                        Office statistics
+                    </small>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- REMINDERS -->
+
+            <div class="section-title-row">
+
+                <h2>
+                    Upcoming reminders
+                </h2>
+
+                <button
+                    class="text-button"
+                    data-action="reminder">
+
+                    + Add
+
+                </button>
+
+            </div>
+
+
+            <div id="reminderList">
+
+                <div class="empty-state">
+
+                    <div class="empty-state-icon">
+                        ◷
+                    </div>
+
+                    <h3>
+                        No reminders
+                    </h3>
+
+                    <p>
+                        Upcoming reminders will appear here.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         BOTTOM NAVIGATION
+    ========================================== -->
+
+    <nav class="bottom-navigation">
+
+
+        <button
+            class="nav-item active"
+            data-screen="homeScreen">
+
+            <span class="nav-icon">
+                ⌂
+            </span>
+
+            <span>
+                Home
+            </span>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            data-screen="workScreen">
+
+            <span class="nav-icon">
+                ✓
+            </span>
+
+            <span>
+                Work
+            </span>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            data-screen="lettersScreen">
+
+            <span class="nav-icon">
+                ✉
+            </span>
+
+            <span>
+                Letters
+            </span>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            data-screen="officeScreen">
+
+            <span class="nav-icon">
+                ▦
+            </span>
+
+            <span>
+                Office
+            </span>
+
+        </button>
+
+
+    </nav>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
 
     <script src="js/app.js"></script>
+
+</div>
 
 </body>
 
