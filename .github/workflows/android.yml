@@ -43,20 +43,19 @@ jobs:
           cordova platform add android
 
 
-      - name: Show Cordova information
+      - name: Check Cordova requirements
         run: |
           cordova requirements
-          cordova platform ls
 
 
       - name: Build Android APK
         run: |
-          cordova build android --debug --verbose
+          cordova build android --debug
 
 
-      - name: Find generated APK
+      - name: Find APK
         run: |
-          echo "Searching for APK files..."
+          echo "Searching for APK..."
           find platforms/android -type f -name "*.apk" -print
 
 
