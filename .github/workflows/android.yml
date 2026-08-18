@@ -1,49 +1,60 @@
-name: Build My Office APK
+name: Build My Office Android APK
 
 on:
   workflow_dispatch:
 
-  push:
-    branches:
-      - main
-
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Checkout project
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: 20
 
-      - name: Setup Java
-        uses: actions/setup-java@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
-          distribution: "temurin"
-          java-version: "17"
+          distribution: temurin
+          java-version: 17
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v4
 
       - name: Install Cordova
-        run: npm install -g cordova@13.0.0
+        run: |
+          npm install -g cordova
+
 
       - name: Install project dependencies
-        run: npm install
+        run: |
+          npm install
+
 
       - name: Add Android platform
-        run: cordova platform add android
+        run: |
+          cordova platform add android
+
 
       - name: Build Android APK
-        run: cordova build android --debug
+        run: |
+          cordova build android --debug
+
+
+      - name: Find APK
+        run: |
+          find platforms/android -name "*.apk" -type f
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: My-Office-APK
-          path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+          path: platforms/android/app/build/outputs/apk/debug/*.apk
