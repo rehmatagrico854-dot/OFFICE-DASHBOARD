@@ -7,29 +7,43 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
 
     <meta
         name="theme-color"
-        content="#0B1220">
+        content="#10182d"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
 
     <title>My Office</title>
 
     <link
         rel="stylesheet"
-        href="css/style.css">
+        href="css/style.css"
+    >
 
 </head>
 
 
 <body>
 
+
 <div id="app">
 
 
-    <!-- =========================================
-         TOP HEADER
-    ========================================== -->
+    <!-- =================================================
+         HEADER
+    ================================================== -->
 
     <header class="app-header">
 
@@ -58,10 +72,9 @@
 
         <button
             class="header-action"
-            id="settingsButton"
-            aria-label="Settings">
+            aria-label="Notifications">
 
-            ⚙
+            ♢
 
         </button>
 
@@ -69,42 +82,44 @@
 
 
 
-    <!-- =========================================
+    <!-- =================================================
          MAIN CONTENT
-    ========================================== -->
+    ================================================== -->
 
     <main class="main-content">
 
 
-        <!-- =====================================
-             HOME
-        ====================================== -->
+        <!-- =============================================
+             HOME SCREEN
+        ============================================== -->
 
         <section
-            id="homeScreen"
-            class="screen active">
+            class="screen active"
+            id="homeScreen">
 
 
             <div class="welcome-area">
 
                 <span class="section-kicker">
-                    OFFICE COMMAND CENTRE
+                    MY OFFICE
                 </span>
 
-                <h1 id="greeting">
-                    Good evening
+                <h1>
+                    <span id="greeting">
+                        Good morning
+                    </span>
                 </h1>
 
                 <p>
                     Everything important,
-                    organised in one place.
+                    organized in one place.
                 </p>
 
             </div>
 
 
 
-            <!-- TODAY CARD -->
+            <!-- HERO -->
 
             <div class="hero-card">
 
@@ -113,15 +128,15 @@
                     <div>
 
                         <span class="hero-label">
-                            TODAY'S OVERVIEW
+                            OFFICE OVERVIEW
                         </span>
 
-                        <h2 id="todayMessage">
-                            Your workspace is ready
+                        <h2>
+                            Stay on top of
+                            your work.
                         </h2>
 
                     </div>
-
 
                     <div class="hero-symbol">
                         ✦
@@ -132,9 +147,7 @@
 
                 <div class="hero-progress">
 
-                    <div
-                        id="progressBar">
-                    </div>
+                    <div id="progressBar"></div>
 
                 </div>
 
@@ -142,7 +155,7 @@
                 <div class="hero-footer">
 
                     <span>
-                        Office matters
+                        Overall task progress
                     </span>
 
                     <strong id="totalItems">
@@ -155,16 +168,16 @@
 
 
 
-            <!-- SUMMARY -->
+            <!-- DASHBOARD -->
 
             <div class="section-title-row">
 
                 <h2>
-                    At a glance
+                    Your office today
                 </h2>
 
                 <span>
-                    Today
+                    Overview
                 </span>
 
             </div>
@@ -182,8 +195,7 @@
                         ✉
                     </div>
 
-                    <strong
-                        id="letterCount">
+                    <strong id="letterCount">
                         0
                     </strong>
 
@@ -192,7 +204,7 @@
                     </span>
 
                     <small>
-                        Pending
+                        Awaiting response
                     </small>
 
                 </button>
@@ -208,8 +220,7 @@
                         ✓
                     </div>
 
-                    <strong
-                        id="taskCount">
+                    <strong id="taskCount">
                         0
                     </strong>
 
@@ -218,7 +229,7 @@
                     </span>
 
                     <small>
-                        Active
+                        Work to complete
                     </small>
 
                 </button>
@@ -234,8 +245,7 @@
                         ◷
                     </div>
 
-                    <strong
-                        id="reminderCount">
+                    <strong id="reminderCount">
                         0
                     </strong>
 
@@ -260,8 +270,7 @@
                         ◆
                     </div>
 
-                    <strong
-                        id="matterCount">
+                    <strong id="matterCount">
                         0
                     </strong>
 
@@ -270,10 +279,11 @@
                     </span>
 
                     <small>
-                        Active
+                        Active work
                     </small>
 
                 </button>
+
 
             </div>
 
@@ -284,8 +294,12 @@
             <div class="section-title-row">
 
                 <h2>
-                    Needs your attention
+                    Needs attention
                 </h2>
+
+                <span>
+                    Important
+                </span>
 
             </div>
 
@@ -303,8 +317,8 @@
                     </h3>
 
                     <p>
-                        Your important office matters
-                        will appear here.
+                        Your important office
+                        matters will appear here.
                     </p>
 
                 </div>
@@ -313,13 +327,17 @@
 
 
 
-            <!-- QUICK ACTIONS -->
+            <!-- QUICK ADD -->
 
             <div class="section-title-row">
 
                 <h2>
                     Quick add
                 </h2>
+
+                <span>
+                    Create
+                </span>
 
             </div>
 
@@ -386,6 +404,7 @@
 
                 </button>
 
+
             </div>
 
 
@@ -393,13 +412,13 @@
 
 
 
-        <!-- =====================================
-             WORK
-        ====================================== -->
+        <!-- =============================================
+             WORK SCREEN
+        ============================================== -->
 
         <section
-            id="workScreen"
-            class="screen">
+            class="screen"
+            id="workScreen">
 
 
             <div class="screen-header">
@@ -407,15 +426,14 @@
                 <div>
 
                     <span class="section-kicker">
-                        WORKSPACE
+                        ORGANIZE
                     </span>
 
                     <h1>
-                        Work
+                        My Work
                     </h1>
 
                 </div>
-
 
                 <button
                     class="primary-button"
@@ -431,19 +449,19 @@
             <div class="tab-navigation">
 
                 <button class="tab active">
-                    Tasks
+                    All
+                </button>
+
+                <button class="tab">
+                    Pending
+                </button>
+
+                <button class="tab">
+                    Completed
                 </button>
 
                 <button class="tab">
                     Matters
-                </button>
-
-                <button class="tab">
-                    Projects
-                </button>
-
-                <button class="tab">
-                    Daily Log
                 </button>
 
             </div>
@@ -463,17 +481,8 @@
 
                     <p>
                         Add your office tasks and
-                        keep track of everything
-                        that needs to be done.
+                        keep track of everything.
                     </p>
-
-                    <button
-                        class="primary-button"
-                        data-action="task">
-
-                        + Add first task
-
-                    </button>
 
                 </div>
 
@@ -484,13 +493,13 @@
 
 
 
-        <!-- =====================================
-             LETTERS
-        ====================================== -->
+        <!-- =============================================
+             LETTERS SCREEN
+        ============================================== -->
 
         <section
-            id="lettersScreen"
-            class="screen">
+            class="screen"
+            id="lettersScreen">
 
 
             <div class="screen-header">
@@ -506,7 +515,6 @@
                     </h1>
 
                 </div>
-
 
                 <button
                     class="primary-button"
@@ -531,8 +539,7 @@
                         Pending
                     </span>
 
-                    <strong
-                        id="pendingLetterTotal">
+                    <strong id="pendingLetterTotal">
                         0
                     </strong>
 
@@ -545,8 +552,7 @@
                         Due today
                     </span>
 
-                    <strong
-                        id="dueLetterTotal">
+                    <strong id="dueLetterTotal">
                         0
                     </strong>
 
@@ -566,29 +572,6 @@
 
                 </div>
 
-            </div>
-
-
-
-            <!-- LETTER TABS -->
-
-            <div class="tab-navigation">
-
-                <button class="tab active">
-                    All
-                </button>
-
-                <button class="tab">
-                    Pending
-                </button>
-
-                <button class="tab">
-                    Due
-                </button>
-
-                <button class="tab">
-                    Responded
-                </button>
 
             </div>
 
@@ -600,7 +583,8 @@
 
                 <div class="empty-state large">
 
-                    <div class="empty-state-icon letter-empty">
+                    <div
+                        class="empty-state-icon letter-empty">
                         ✉
                     </div>
 
@@ -614,14 +598,6 @@
                         scanned copies will appear here.
                     </p>
 
-                    <button
-                        class="primary-button"
-                        data-action="letter">
-
-                        + Add first letter
-
-                    </button>
-
                 </div>
 
             </div>
@@ -631,13 +607,13 @@
 
 
 
-        <!-- =====================================
-             OFFICE
-        ====================================== -->
+        <!-- =============================================
+             OFFICE SCREEN
+        ============================================== -->
 
         <section
-            id="officeScreen"
-            class="screen">
+            class="screen"
+            id="officeScreen">
 
 
             <div class="screen-header">
@@ -645,7 +621,7 @@
                 <div>
 
                     <span class="section-kicker">
-                        OFFICE TOOLS
+                        OFFICE CONTROL
                     </span>
 
                     <h1>
@@ -661,25 +637,29 @@
             <div class="office-tools-grid">
 
 
-                <button class="office-tool">
+                <button
+                    class="office-tool"
+                    data-action="reminder">
 
                     <div>
                         ◷
                     </div>
 
                     <strong>
-                        Calendar
+                        Reminders
                     </strong>
 
                     <small>
-                        Meetings & deadlines
+                        Never miss an important date
                     </small>
 
                 </button>
 
 
 
-                <button class="office-tool">
+                <button
+                    class="office-tool"
+                    data-action="note">
 
                     <div>
                         ✎
@@ -690,17 +670,18 @@
                     </strong>
 
                     <small>
-                        Quick office notes
+                        Save quick office information
                     </small>
 
                 </button>
 
 
 
-                <button class="office-tool">
+                <button
+                    class="office-tool">
 
                     <div>
-                        ♙
+                        👥
                     </div>
 
                     <strong>
@@ -708,14 +689,15 @@
                     </strong>
 
                     <small>
-                        People & departments
+                        People and organizations
                     </small>
 
                 </button>
 
 
 
-                <button class="office-tool">
+                <button
+                    class="office-tool">
 
                     <div>
                         ▣
@@ -726,46 +708,49 @@
                     </strong>
 
                     <small>
-                        Office records
+                        Important office records
                     </small>
 
                 </button>
 
 
 
-                <button class="office-tool">
+                <button
+                    class="office-tool">
 
                     <div>
-                        ⌕
+                        ▦
                     </div>
 
                     <strong>
-                        Search
+                        Calendar
                     </strong>
 
                     <small>
-                        Find anything
+                        Meetings and deadlines
                     </small>
 
                 </button>
 
 
 
-                <button class="office-tool">
+                <button
+                    class="office-tool">
 
                     <div>
-                        ▥
+                        ⚙
                     </div>
 
                     <strong>
-                        Reports
+                        Settings
                     </strong>
 
                     <small>
-                        Office statistics
+                        App and data settings
                     </small>
 
                 </button>
+
 
             </div>
 
@@ -778,14 +763,6 @@
                 <h2>
                     Upcoming reminders
                 </h2>
-
-                <button
-                    class="text-button"
-                    data-action="reminder">
-
-                    + Add
-
-                </button>
 
             </div>
 
@@ -803,7 +780,8 @@
                     </h3>
 
                     <p>
-                        Upcoming reminders will appear here.
+                        Upcoming reminders
+                        will appear here.
                     </p>
 
                 </div>
@@ -818,9 +796,9 @@
 
 
 
-    <!-- =========================================
+    <!-- =================================================
          BOTTOM NAVIGATION
-    ========================================== -->
+    ================================================== -->
 
     <nav class="bottom-navigation">
 
@@ -833,9 +811,7 @@
                 ⌂
             </span>
 
-            <span>
-                Home
-            </span>
+            Home
 
         </button>
 
@@ -848,9 +824,7 @@
                 ✓
             </span>
 
-            <span>
-                Work
-            </span>
+            Work
 
         </button>
 
@@ -863,9 +837,7 @@
                 ✉
             </span>
 
-            <span>
-                Letters
-            </span>
+            Letters
 
         </button>
 
@@ -875,12 +847,10 @@
             data-screen="officeScreen">
 
             <span class="nav-icon">
-                ▦
+                ◈
             </span>
 
-            <span>
-                Office
-            </span>
+            Office
 
         </button>
 
@@ -888,14 +858,16 @@
     </nav>
 
 
-
-    <!-- =========================================
-         JAVASCRIPT
-    ========================================== -->
-
-    <script src="js/app.js"></script>
-
 </div>
+
+
+
+<!-- =====================================================
+     APPLICATION JAVASCRIPT
+====================================================== -->
+
+<script src="js/app.js"></script>
+
 
 </body>
 
