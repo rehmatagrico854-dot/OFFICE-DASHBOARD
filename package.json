@@ -1,0 +1,14 @@
+{
+  "name": "my-office",
+  "version": "1.0.0",
+  "description": "My personal offline office management application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests specified\""
+  },
+  "author": "My Office",
+  "license": "MIT",
+  "dependencies": {
+    "cordova": "^13.0.0"
+  }
+}
